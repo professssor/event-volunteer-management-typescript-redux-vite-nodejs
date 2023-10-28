@@ -26,7 +26,7 @@ function AppDashboard() {
           View Event Summary
         </Link>
         <a
-          href="https://github.com/your-github-repo-link"
+          href="https://github.com/professssor/event-volunteer-management-typescript-redux-vite-nodejs"
           style={{ ...buttonStyle, background: "green" }}
         >
           GitHub
