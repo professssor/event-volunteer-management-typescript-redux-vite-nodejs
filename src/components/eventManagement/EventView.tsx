@@ -52,7 +52,7 @@ function EventManagement({}: Props) {
     description: "",
     requiredVolunteers: 0,
   });
-  const { events } = useSelector((state: any) => state.event);
+  const {status,  events } = useSelector((state: any) => state.event);
   const [eventArray, setEventArray] = useState<EventType[]>([]);
 
   useEffect(() => {
@@ -181,6 +181,7 @@ function EventManagement({}: Props) {
       <div
         style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
       >
+        {status==="loading"  && <h1>event data is loading</h1>}
         {eventArray.map((event: EventType, index: number) => (
           <div key={index} style={cardStyle}>
             <h3>{event.name}</h3>

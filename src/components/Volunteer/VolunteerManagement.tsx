@@ -5,7 +5,7 @@ import {
   deleteVolunteers,
   fetchVolunteers,
 } from "./VolunteerSlice";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import AppDashboard from "../Dashboad";
 
 type Props = {};
@@ -58,7 +58,7 @@ function VolunteerManagement({}: Props) {
     areaOfInterest: [],
     event: [],
   });
-  const { volunteers } = useSelector((state: any) => state.volunteer);
+  const { volunteers, status } = useSelector((state: any) => state.volunteer);
 
   useEffect(() => {
     dispatch(fetchVolunteers());
@@ -90,8 +90,11 @@ function VolunteerManagement({}: Props) {
   };
 
   return (
-    <div>      <AppDashboard />
+    <div>
+      {" "}
+      <AppDashboard />
       <h1>Volunteer Management</h1>
+      {status === "loading" && <h3>volunteer data is loading</h3>}
       <button onClick={openModal}>Add Volunteer</button>
       {isModalOpen && (
         <div
@@ -194,7 +197,6 @@ function VolunteerManagement({}: Props) {
           </div>
         </div>
       )}
-
       <div
         style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
       >
@@ -211,9 +213,8 @@ function VolunteerManagement({}: Props) {
             <p>Events: {volunteer.event.join(", ")}</p>
 
             <Link to={`/volunteer/${volunteer._id}`}>
-            <button 
-             style={buttonStyle}>View Volunteer</button>
-             </Link>
+              <button style={buttonStyle}>View Volunteer</button>
+            </Link>
             <button
               style={deleteButtonStyle}
               onClick={() => {
