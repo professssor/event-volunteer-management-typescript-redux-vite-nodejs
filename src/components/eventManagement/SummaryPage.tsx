@@ -4,13 +4,28 @@ import { EventType } from "./EventView";
 import { VolunteerType } from "../Volunteer/VolunteerManagement";
 import { fetchVolunteers } from "../Volunteer/VolunteerSlice";
 import { fetchEvents } from "./EventSlice";
-import AppDashboard from "../Dashboad";
+
+
+const containerStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  minHeight: "100vh",
+  padding: "2rem",
+  textAlign: "center",
+};
+
+const tableStyle: React.CSSProperties = {
+  border: "1px solid #000",
+  marginBottom: "1rem",
+};
 
 function SummaryPage() {
   const dispatch = useDispatch<any>();
-  // Select event data from the Redux store
+
   const { events } = useSelector((state: any) => state.event);
-  // Select volunteer data from the Redux store
+
   const { volunteers } = useSelector((state: any) => state.volunteer);
 
   console.log(events, volunteers);
@@ -20,11 +35,9 @@ function SummaryPage() {
     dispatch(fetchVolunteers());
   }, [dispatch]);
 
-  // Function to render event summaries in a table
   const renderEventSummaries = () => {
     return (
-      <div>
-              <AppDashboard />
+      <div style={tableStyle}>
         <h2>Event Summaries</h2>
         <table style={{ border: "1px solid #000" }}>
           <thead>
@@ -52,10 +65,9 @@ function SummaryPage() {
     );
   };
 
-  // Function to render volunteer summaries in a table
   const renderVolunteerSummaries = () => {
     return (
-      <div>
+      <div style={tableStyle}>
         <h2>Volunteer Summaries</h2>
         <table style={{ border: "1px solid #000" }}>
           <thead>
@@ -68,8 +80,8 @@ function SummaryPage() {
             </tr>
           </thead>
           <tbody>
-            {volunteers.map((volunteer: VolunteerType ) => (
-              <tr key={volunteer._id as React.Key } style={{ border: "1px solid #000" }}>
+            {volunteers.map((volunteer: VolunteerType) => (
+              <tr key={volunteer._id as React.Key} style={{ border: "1px solid #000" }}>
                 <td style={{ border: "1px solid #000" }}>{volunteer.name}</td>
                 <td style={{ border: "1px solid #000" }}>{volunteer.contact}</td>
                 <td style={{ border: "1px solid #000" }}>{volunteer.skills.join(", ")}</td>
@@ -86,7 +98,7 @@ function SummaryPage() {
   };
 
   return (
-    <div>
+    <div style={containerStyle}>
       <h1>Summary Page</h1>
       {renderEventSummaries()}
       {renderVolunteerSummaries()}
