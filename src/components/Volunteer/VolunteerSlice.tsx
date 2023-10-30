@@ -34,12 +34,11 @@ export const fetchVolunteers = createAsyncThunk(
 export const deleteVolunteers: AsyncThunk<any, any, any> = createAsyncThunk(
   "volunteers/deleteVolunteers",
   async (id) => {
-    console.log(id);
     const response = await axios.delete(
       "https://eventvolunteer-management.professssor.repl.co/volunteer",
       { data: { id: id } }
     );
-    console.log(response.data.data);
+
     return response.data.data;
   }
 );

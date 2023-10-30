@@ -5,7 +5,6 @@ import { VolunteerType } from "../Volunteer/VolunteerManagement";
 import { fetchVolunteers } from "../Volunteer/VolunteerSlice";
 import { fetchEvents } from "./EventSlice";
 
-
 const containerStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
@@ -24,11 +23,15 @@ const tableStyle: React.CSSProperties = {
 function SummaryPage() {
   const dispatch = useDispatch<any>();
 
-  const { events } = useSelector((state: any) => state.event);
+  const { events, status: eventStatus } = useSelector(
+    (state: any) => state.event
+  );
 
-  const { volunteers } = useSelector((state: any) => state.volunteer);
+  const { volunteers, status: volunteerStatus } = useSelector(
+    (state: any) => state.volunteer
+  );
 
-  console.log(events, volunteers);
+
 
   useEffect(() => {
     dispatch(fetchEvents());
@@ -39,24 +42,37 @@ function SummaryPage() {
     return (
       <div style={tableStyle}>
         <h2>Event Summaries</h2>
+        {eventStatus === "loading" && <h4>Loading event summary details </h4>}
         <table style={{ border: "1px solid #000" }}>
           <thead>
             <tr>
               <th style={{ border: "1px solid #000" }}>Event Name</th>
-              <th style={{ border: "1px solid #000" }}>Date</th>
-              <th style={{ border: "1px solid #000" }}>Location</th>
-              <th style={{ border: "1px solid #000" }}>Description</th>
-              <th style={{ border: "1px solid #000" }}>Volunteers Required</th>
+
+              <th style={{ border: "1px solid #000" }}>Event details</th>
+              <th style={{ border: "1px solid #000" }}>Volunteers list </th>
+
+              <th style={{ border: "1px solid #000" }}>Volunteers roles </th>
             </tr>
           </thead>
           <tbody>
-            {events.map((event: EventType) => (
+            {events.map((event: EventType, eventIndex: number) => (
               <tr key={event._id} style={{ border: "1px solid #000" }}>
                 <td style={{ border: "1px solid #000" }}>{event.name}</td>
-                <td style={{ border: "1px solid #000" }}>{event.date}</td>
-                <td style={{ border: "1px solid #000" }}>{event.location}</td>
-                <td style={{ border: "1px solid #000" }}>{event.description}</td>
-                <td style={{ border: "1px solid #000" }}>{event.requiredVolunteers}</td>
+
+                <td style={{ border: "1px solid #000" }}>
+                  {event.description}
+                </td>
+                <td style={{ border: "1px solid #000" }}>
+                  {
+                    volunteers.find((_:any, i: React.Key) => i === eventIndex)
+                      .skills
+                  }
+                </td>
+                <td style={{ border: "1px solid #000" }}>
+                  {volunteers.map(
+                    (volunteer: VolunteerType) => volunteer.skills
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -69,6 +85,10 @@ function SummaryPage() {
     return (
       <div style={tableStyle}>
         <h2>Volunteer Summaries</h2>
+
+        {volunteerStatus === "loading" && (
+          <h4>Loading event summary details </h4>
+        )}
         <table style={{ border: "1px solid #000" }}>
           <thead>
             <tr>
@@ -76,19 +96,32 @@ function SummaryPage() {
               <th style={{ border: "1px solid #000" }}>Contact</th>
               <th style={{ border: "1px solid #000" }}>Skills</th>
               <th style={{ border: "1px solid #000" }}>Availability</th>
-              <th style={{ border: "1px solid #000" }}>Area of Interest</th>
+              <th style={{ border: "1px solid #000" }}>Assigned Events</th>
+              <th style={{ border: "1px solid #000" }}>Volunteer history</th>
             </tr>
           </thead>
           <tbody>
             {volunteers.map((volunteer: VolunteerType) => (
-              <tr key={volunteer._id as React.Key} style={{ border: "1px solid #000" }}>
+              <tr
+                key={volunteer._id as React.Key}
+                style={{ border: "1px solid #000" }}
+              >
                 <td style={{ border: "1px solid #000" }}>{volunteer.name}</td>
-                <td style={{ border: "1px solid #000" }}>{volunteer.contact}</td>
-                <td style={{ border: "1px solid #000" }}>{volunteer.skills.join(", ")}</td>
+                <td style={{ border: "1px solid #000" }}>
+                  {volunteer.contact}
+                </td>
+                <td style={{ border: "1px solid #000" }}>
+                  {volunteer.skills.join(", ")}
+                </td>
                 <td style={{ border: "1px solid #000" }}>
                   {volunteer.availability ? "Available" : "Not Available"}
                 </td>
-                <td style={{ border: "1px solid #000" }}>{volunteer.areaOfInterest.join(", ")}</td>
+                <td style={{ border: "1px solid #000" }}>
+                  {volunteer.areaOfInterest.join(", ")}
+                </td>
+                <td style={{ border: "1px solid #000" }}>
+                  {volunteer.areaOfInterest.join(",").split(",")[0]}
+                </td>
               </tr>
             ))}
           </tbody>
